@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # Copyright © 2012 R.F. Smith <rsmith@xs4all.nl>. All rights reserved.
-# Time-stamp: <2012-05-19 15:44:14 rsmith>
+# Time-stamp: <2012-05-20 14:13:11 rsmith>
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -69,7 +69,7 @@ def footer():
     Return the end for a standard table LaTeX environment that contains a
     tabular environment.
     """
-    rs =  r'  \end{tabular}}'+'\n'
+    rs =  r'  \end{tabular}'+'\n'
     rs += r'\end{table}'
     return rs
 

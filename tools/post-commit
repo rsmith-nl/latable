@@ -1,0 +1,12 @@
+#!/bin/sh
+# Script to be executed after a successfull commit.
+# 
+# Looks for changed files that contain the keywords, removes those files
+# and checks them out again to refresh the keywords. The files in FILES
+# should correspond to the files that have the kw filter set in 
+# .gitattibutes.
+
+FILES=`ls *.py`
+rm -f $FILES
+git checkout $FILES
+

@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # Copyright © 2012 R.F. Smith <rsmith@xs4all.nl>. All rights reserved.
-# Time-stamp: <2012-05-20 14:13:11 rsmith>
+# $Date$
 # 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -25,6 +25,8 @@
 # SUCH DAMAGE.
 
 "Generate LaTeX tables from Python."
+
+__version__ = '$Revision$'[11:-2]
 
 rule = (r'  \toprule'+'\n', r'  \midrule'+'\n', r'\bottomrule'+'\n')
 

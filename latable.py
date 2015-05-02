@@ -11,7 +11,7 @@
 
 "Generate LaTeX tables from Python."
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 
 def sheader(align):
@@ -71,7 +71,12 @@ def line(*args):
     """
     rs = '  '
     sep = r' & '
+    illegal = ('&', r'\\')
+    es = "argument should not contain '{}'"
     for n in args:
+        for symbol in illegal:
+            if symbol in n:
+                raise ValueError(es.format(symbol))
         rs += str(n)+sep
     rs = rs[:-len(sep)] + r'\\'
     return rs

@@ -71,3 +71,6 @@ This produces;
       width & 21.0 cm\\
       \end{tabular}
     \end{table}
+
+.. note:: The ``line`` function will raise a ``ValueError`` if one of its arguments
+    contains ``&`` or ``\\``.

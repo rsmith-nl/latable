@@ -5,14 +5,13 @@
 # $Date$
 # $Revision$
 #
-# To the extent possible under law, <rsmith@xs4all.nl> has waived all
-# copyright and related or neighboring rights to latable.py. This work is
-# published from the Netherlands. See
-# http://creativecommons.org/publicdomain/zero/1.0/
+# To the extent possible under law, Roland Smith has waived all copyright and
+# related or neighboring rights to latable.py. This work is published from the
+# Netherlands. See http://creativecommons.org/publicdomain/zero/1.0/
 
 "Generate LaTeX tables from Python."
 
-__version__ = '$Revision$'[11:-2]
+__version__ = '0.1.0'
 
 
 def sheader(align):
@@ -24,6 +23,13 @@ def sheader(align):
     :returns: The start of a simple aligned tabular environment.
     """
     return r'{\hspace{-\tabcolsep}\begin{tabular}{' + align + r'}'
+
+
+def sfooter():
+    """
+    Return the end for a simple table LaTeX environment.
+    """
+    return r'\end{tabular}}'
 
 
 def header(align, caption, label=None, pos='!htbp'):
@@ -46,13 +52,6 @@ def header(align, caption, label=None, pos='!htbp'):
         rs += r'  \caption{' + caption + '}\n'
     rs += r'  \begin{tabular}{' + align + '}'
     return rs
-
-
-def sfooter():
-    """
-    Return the end for a simple table LaTeX environment.
-    """
-    return r'\end{tabular}}'
 
 
 def footer():

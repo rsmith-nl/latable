@@ -4,7 +4,7 @@
 # Copyright © 2012,2013,2015 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2015-05-16 23:05:20 +0200
+# Last modified: 2015-05-16 23:23:29 +0200
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -29,7 +29,7 @@
 """Generate LaTeX tables from Python."""
 
 __title__ = 'latable'
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 __author__ = 'Roland Smith'
 __license__ = 'BSD'
 __copyright__ = 'Copyright © 2012,2013,2015 R.F. Smith'

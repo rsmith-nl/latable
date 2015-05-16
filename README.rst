@@ -1,7 +1,7 @@
 Generating LaTeX tables with Python
 ###################################
 
-:date: 2015-05-02
+:date: 2015-05-16
 :tags: LaTeX, Python 3
 :author: Roland Smith
 
@@ -30,34 +30,30 @@ Create a simple, non-floating table;
 
     import latable as lt
 
-    t = []
-    t.append(lt.sheader('lr'))
-    t.append(lt.line('height', '29.7 cm'))
-    t.append(lt.line('width', '21.0 cm'))
-    t.append(lt.sfooter())
-    print('\n'.join(t))
+    t = lt.Tabular('lr')
+    t.add_row('height', '29.7 cm')
+    t.add_row('width', '21.0 cm')
+    print(t)
 
 This produces;
 
 .. code-block:: tex
 
     {\hspace{-\tabcolsep}\begin{tabular}{lr}
-      height & 29.7 cm\\
-      width & 21.0 cm\\
+    height & 29.7 cm\\
+    width & 21.0 cm\\
     \end{tabular}}
 
-Using the ``header`` and ``footer`` produces a floating table;
+Alternatively, a floating table environment can be used;
 
 .. code-block:: python
 
     import latable as lt
 
-    t = []
-    t.append(lt.header('lr', 'A4 paper size', label='a4paper', pos='ht'))
-    t.append(lt.line('height', '29.7 cm'))
-    t.append(lt.line('width', '21.0 cm'))
-    t.append(lt.footer())
-    print('\n'.join(t))
+    t = lt.Table('lr', 'A4 paper size', pos='ht', label='a4paper')
+    t.add_row('height', '29.7 cm')
+    t.add_row('width', '21.0 cm')
+    print(t)
 
 This produces;
 

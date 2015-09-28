@@ -1,10 +1,10 @@
 # file: latable.py
-# vim:fileencoding=utf-8:ft=python
+# vim:fileencoding=utf-8:ft=python:fdm=indent
 #
 # Copyright © 2012,2013,2015 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2015-09-20 16:47:52 +0200
+# Last modified: 2015-09-28 22:01:04 +0200
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -32,8 +32,7 @@ __version__ = '0.3.2'
 
 
 class Tabular(object):
-    """Simple tabular environment for LaTeX. Aligns the left of the table with
-    the left of the text block."""
+    """Simple LaTeX tabular generator."""
 
     def __init__(self, columns):
         """
@@ -79,6 +78,7 @@ class Tabular(object):
 
 
 class Table(Tabular):
+    """Floating LaTeX table generator."""
 
     def __init__(self, columns, caption, pos='!htbp', label=None):
         """Create a LaTeX table float.

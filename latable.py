@@ -4,7 +4,7 @@
 # Copyright © 2012,2013,2015 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2015-09-28 22:01:04 +0200
+# Last modified: 2015-09-30 23:41:52 +0200
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -28,7 +28,9 @@
 
 """Generate LaTeX tables from Python."""
 
-__version__ = '0.3.2'
+__version__ = '0.4.0'
+
+import re
 
 
 class Tabular(object):
@@ -42,8 +44,12 @@ class Tabular(object):
 
         Arguments:
             columns: A string containing the specification for the columns.
+                This string is scanned for the ‘l’, ‘c’, ‘r’ and ‘p’
+                specifiers. The ‘*’ specifier is *not* handled.
         """
         self.header = r'{\hspace{-\tabcolsep}\begin{tabular}{' + columns + r'}'
+        # Find the number of columns. Note that this does *not* handle *{}{}!
+        self.numcols = len(re.findall('l|c|r|p{.*?}', columns))
         self.rows = []
         self.footer = r'\end{tabular}}'
 
@@ -53,21 +59,19 @@ class Tabular(object):
 
         Arguments:
             args: Every argument forms a column of the table. Note that the
-                arguments cannot contain '&' or '\\'. Currently this does not
-                check that the amount of arguments matches with the columns
-                specfication given in the init method.
+                arguments cannot contain '&' or '\\'. The amount of arguments
+                should not exceed ‘self.numcols’.
+
+        Raises:
+            ValueError: If any of the arguments contains '&' or '\\'.
+            IndexError: When more than ‘self.numcols’ arguments are supplied.
         """
-        rs = '  '
-        sep = r' & '
-        illegal = ('&', r'\\')
-        es = "argument should not contain '{}'"
-        for n in args:
-            for symbol in illegal:
-                if symbol in n:
-                    raise ValueError(es.format(symbol))
-            rs += str(n)+sep
-        rs = rs[:-len(sep)] + r'\\'
-        self.rows.append(rs)
+        if len(args) > self.numcols:
+            raise IndexError('too many columns specified')
+        argtxt = ' '.join(args)
+        if any([True for sym in ('&', r'\\') if sym in argtxt]):
+            raise ValueError("arguments should not contain & or \\\\.")
+        self.rows.append('  ' + r' & '.join(args) + r'\\')
 
     def __str__(self):
         """
@@ -85,7 +89,7 @@ class Table(Tabular):
 
         Arugments:
             columns: The columns of the table, e.g. 'lcr'
-            caption: The caption of the table.
+            caption: The caption for the table.
             pos: Indicates the position of the float on the page. Defaults to
                 '!htbp'.
             label: Optional label for the table.

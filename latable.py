@@ -1,10 +1,10 @@
 # file: latable.py
 # vim:fileencoding=utf-8:ft=python:fdm=indent
 #
-# Copyright © 2012,2013,2015 R.F. Smith <rsmith@xs4all.nl>.
+# Copyright © 2012,2013,2015,2016 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2015-09-30 23:41:52 +0200
+# Last modified: 2016-01-05 21:39:52 +0100
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -28,34 +28,35 @@
 
 """Generate LaTeX tables from Python."""
 
-__version__ = '0.4.0'
-
 import re
+
+__version__ = '1.0.0'
 
 
 class Tabular(object):
     """Simple LaTeX tabular generator."""
 
-    def __init__(self, columns):
+    def __init__(self, columns, toprule=False, bottomrule=False):
         """
-        Create a LaTeX tabular environment. It is not a bare table, but the
-        first column is aligned with the surroundings by moving it to the left
-        by tabcolsep.
+        Create a LaTeX tabular environment.
 
         Arguments:
             columns: A string containing the specification for the columns.
                 This string is scanned for the ‘l’, ‘c’, ‘r’ and ‘p’
                 specifiers. The ‘*’ specifier is *not* handled.
+            toprule: Print a horizontal rule at the top of the table.
+            bottomrule: Print a horizontal rule at the bottom of the table.
         """
-        self.header = r'{\hspace{-\tabcolsep}\begin{tabular}{' + columns + r'}'
+        self.header = r'\begin{tabular}{' + columns + r'}'
         # Find the number of columns. Note that this does *not* handle *{}{}!
         self.numcols = len(re.findall('l|c|r|p{.*?}', columns))
         self.rows = []
-        self.footer = r'\end{tabular}}'
+        self.footer = r'\end{tabular}'
+        self.toprule = toprule
+        self.bottomrule = bottomrule
 
-    def add_row(self, *args):
-        r"""
-        Add a row to the table.
+    def row(self, *args):
+        r"""Add a row to the table.
 
         Arguments:
             args: Every argument forms a column of the table. Note that the
@@ -73,18 +74,29 @@ class Tabular(object):
             raise ValueError("arguments should not contain & or \\\\.")
         self.rows.append('  ' + r' & '.join(args) + r'\\')
 
+    def midrule(self):
+        r"""Add a \midrule to the table."""
+        self.rows.append(r'  \midrule')
+
     def __str__(self):
         """
         Return the string rendering of the environment.
         """
-        table = [self.header] + self.rows + [self.footer]
+        table = [self.header]
+        if self.toprule:
+            table += [r'  \toprule']
+        table += self.rows
+        if self.toprule:
+            table += [r'  \bottomrule']
+        table += [self.footer]
         return '\n'.join(table)
 
 
 class Table(Tabular):
     """Floating LaTeX table generator."""
 
-    def __init__(self, columns, caption, pos='!htbp', label=None):
+    def __init__(self, columns, caption, pos='!htbp', label=None,
+                 toprule=False, bottomrule=False):
         """Create a LaTeX table float.
 
         Arugments:
@@ -92,9 +104,9 @@ class Table(Tabular):
             caption: The caption for the table.
             pos: Indicates the position of the float on the page. Defaults to
                 '!htbp'.
-            label: Optional label for the table.
+            label: Optional label for the table. Defaults to None
         """
-        Tabular.__init__(self, columns)
+        Tabular.__init__(self, columns, toprule=toprule, bottomrule=bottomrule)
         rs = r'\begin{table}[' + pos + ']\n'
         rs += '  \\centering\n'
         if label:

@@ -1,10 +1,10 @@
 # file: latable.py
 # vim:fileencoding=utf-8:ft=python:fdm=indent
 #
-# Copyright © 2012,2013,2015,2016 R.F. Smith <rsmith@xs4all.nl>.
+# Copyright © 2012,2013,2015-2017 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2016-01-05 21:39:52 +0100
+# Last modified: 2017-02-04 15:13:53 +0100
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
 
 import re
 
-__version__ = '1.0.0'
+__version__ = '1.1.0'
 
 
 class Tabular(object):
@@ -60,18 +60,22 @@ class Tabular(object):
 
         Arguments:
             args: Every argument forms a column of the table. Note that the
-                arguments cannot contain '&' or '\\'. The amount of arguments
-                should not exceed ‘self.numcols’.
+                arguments cannot contain '\\'. The amount of arguments
+                should not exceed ‘self.numcols’, and it should be less if the
+                arguments contain '&'
 
         Raises:
-            ValueError: If any of the arguments contains '&' or '\\'.
+            ValueError: If any of the arguments contain '\\' or if the row
+                contains too many '&'.
             IndexError: When more than ‘self.numcols’ arguments are supplied.
         """
         if len(args) > self.numcols:
             raise IndexError('too many columns specified')
-        argtxt = ' '.join(args)
-        if any([True for sym in ('&', r'\\') if sym in argtxt]):
-            raise ValueError("arguments should not contain & or \\\\.")
+        content = '  ' + r' & '.join(args) + r'\\'
+        if r'\\' in ' '.join(args):
+            raise ValueError("arguments should not contain \\\\.")
+        if content.count('&') > self.numcols-1:
+            raise ValueError("Too many '&'")
         self.rows.append('  ' + r' & '.join(args) + r'\\')
 
     def midrule(self):

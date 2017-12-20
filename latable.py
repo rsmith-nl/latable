@@ -4,7 +4,7 @@
 # Copyright © 2012,2013,2015-2017 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2017-02-04 15:13:53 +0100
+# Last modified: 2017-12-20 23:37:10 +0100
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -30,11 +30,14 @@
 
 import re
 
-__version__ = '1.1.0'
+__version__ = '1.2'
 
 
 class Tabular(object):
     """Simple LaTeX tabular generator."""
+
+    __slots__ = ('header', 'numcols', 'rows', 'footer', 'toprule',
+                 'bottomrule')
 
     def __init__(self, columns, toprule=False, bottomrule=False):
         """

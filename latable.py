@@ -1,10 +1,10 @@
 # file: latable.py
-# vim:fileencoding=utf-8:ft=python:fdm=indent
+# vim:fileencoding=utf-8:ft=python:fdm=marker
 #
 # Copyright © 2012,2013,2015-2017 R.F. Smith <rsmith@xs4all.nl>.
 # All rights reserved.
 # Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2017-12-20 23:37:10 +0100
+# Last modified: 2017-12-20 23:50:52 +0100
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -33,13 +33,13 @@ import re
 __version__ = '1.2'
 
 
-class Tabular(object):
+class Tabular(object):  # {{{1
     """Simple LaTeX tabular generator."""
 
     __slots__ = ('header', 'numcols', 'rows', 'footer', 'toprule',
                  'bottomrule')
 
-    def __init__(self, columns, toprule=False, bottomrule=False):
+    def __init__(self, columns, toprule=False, bottomrule=False):  # {{{1
         """
         Create a LaTeX tabular environment.
 
@@ -58,7 +58,7 @@ class Tabular(object):
         self.toprule = toprule
         self.bottomrule = bottomrule
 
-    def row(self, *args):
+    def row(self, *args):  # {{{1
         r"""Add a row to the table.
 
         Arguments:
@@ -81,11 +81,11 @@ class Tabular(object):
             raise ValueError("Too many '&'")
         self.rows.append('  ' + r' & '.join(args) + r'\\')
 
-    def midrule(self):
+    def midrule(self):  # {{{1
         r"""Add a \midrule to the table."""
         self.rows.append(r'  \midrule')
 
-    def __str__(self):
+    def __str__(self):  # {{{1
         """
         Return the string rendering of the environment.
         """
@@ -99,7 +99,7 @@ class Tabular(object):
         return '\n'.join(table)
 
 
-class Table(Tabular):
+class Table(Tabular):  # {{{1
     """Floating LaTeX table generator."""
 
     def __init__(self, columns, caption, pos='!htbp', label=None,

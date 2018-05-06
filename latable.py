@@ -25,7 +25,6 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 """Generate LaTeX tables from Python."""
 
 import re
@@ -36,8 +35,7 @@ __version__ = '1.2'
 class Tabular(object):  # {{{1
     """Simple LaTeX tabular generator."""
 
-    __slots__ = ('header', 'numcols', 'rows', 'footer', 'toprule',
-                 'bottomrule')
+    __slots__ = ('header', 'numcols', 'rows', 'footer', 'toprule', 'bottomrule')
 
     def __init__(self, columns, toprule=False, bottomrule=False):  # {{{1
         """
@@ -77,7 +75,7 @@ class Tabular(object):  # {{{1
         content = '  ' + r' & '.join(args) + r'\\'
         if r'\\' in ' '.join(args):
             raise ValueError("arguments should not contain \\\\.")
-        if content.count('&') > self.numcols-1:
+        if content.count('&') > self.numcols - 1:
             raise ValueError("Too many '&'")
         self.rows.append('  ' + r' & '.join(args) + r'\\')
 
@@ -102,8 +100,7 @@ class Tabular(object):  # {{{1
 class Table(Tabular):  # {{{1
     """Floating LaTeX table generator."""
 
-    def __init__(self, columns, caption, pos='!htbp', label=None,
-                 toprule=False, bottomrule=False):
+    def __init__(self, columns, caption, pos='!htbp', label=None, toprule=False, bottomrule=False):
         """Create a LaTeX table float.
 
         Arugments:

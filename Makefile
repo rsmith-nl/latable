@@ -4,7 +4,7 @@
 #
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-05T23:07:20+0100
-# Last modified: 2018-11-06T21:39:54+0100
+# Last modified: 2018-11-06T23:02:11+0100
 
 .PHONY: all install tests dist clean backup deinstall check tags format
 .SUFFIXES: .ps .pdf .py
@@ -56,7 +56,7 @@ tags::
 	exctags -R
 
 format::
-	yapf-3.7 -i ${MOD}.py tests/*.py
+	yapf-3.7 -i ${MOD}.py setup.py tests/*.py
 
 tests::
 	pytest-3.7 -v tests

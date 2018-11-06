@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T00:33:19+0100
-# Last modified: 2018-11-06T22:59:45+0100
+# Last modified: 2018-11-07T00:12:34+0100
 """Generate LaTeX tables from Python."""
 
 import re
@@ -12,7 +12,7 @@ import re
 __version__ = 2.0
 
 
-def header(columns, table=False, caption='Undefined', pos='!htbp', label=None):
+def header(columns, table=False, caption='Undefined', pos='!htbp', label=None):  # {{{1
     """Create a table header.
 
     Arguments:
@@ -35,10 +35,10 @@ def header(columns, table=False, caption='Undefined', pos='!htbp', label=None):
     else:
         rs += r'  \caption{' + caption + '}\n'
     rs += r'  \begin{tabular}{' + columns + '}'
-    return rs
+    return rs  # }}}
 
 
-def footer(table=False):
+def footer(table=False):  # {{{1
     """Create a table footer.
 
     Arguments:
@@ -50,10 +50,10 @@ def footer(table=False):
     """
     if not table:
         return r'\end{tabular}'
-    return r'  \end{tabular}' + '\n' + r'\end{table}'
+    return r'  \end{tabular}' + '\n' + r'\end{table}'  # }}}
 
 
-def rowfn(columns, ignore=False):
+def rowfn(columns, ignore=False):  # {{{1
     """Generate a function to create rows for the given column specification.
 
     Arguments:
@@ -80,4 +80,4 @@ def rowfn(columns, ignore=False):
             raise ValueError("Too many '&'")
         return '  ' + content + r'\\'
 
-    return row
+    return row  # }}}

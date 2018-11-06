@@ -1,123 +1,86 @@
 # file: latable.py
-# vim:fileencoding=utf-8:ft=python:fdm=marker
+# vim:fileencoding=utf-8:fdm=marker:ft=python
 #
-# Copyright © 2012,2013,2015-2017 R.F. Smith <rsmith@xs4all.nl>.
-# All rights reserved.
-# Created: 2012-05-19 15:51:09 +0200
-# Last modified: 2017-12-20 23:50:52 +0100
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-#
-# THIS SOFTWARE IS PROVIDED BY AUTHOR AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-# OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-# OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN
-# NO EVENT SHALL AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
-# OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-# EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# SPDX-License-Identifier: MIT
+# Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
+# Created: 2018-11-06T00:33:19+0100
+# Last modified: 2018-11-06T07:43:18+0100
 """Generate LaTeX tables from Python."""
 
+from functools import lru_cache
 import re
 
-__version__ = '1.2'
+__version__ = 2.0
 
 
-class Tabular(object):  # {{{1
-    """Simple LaTeX tabular generator."""
+def header(columns, table=False, caption='Undefined', pos='!htbp', label=None):
+    """Create a table header.
 
-    __slots__ = ('header', 'numcols', 'rows', 'footer', 'toprule', 'bottomrule')
+    Arguments:
+        table: Use a table environment when true, otherwise just use a tabular environment.
+            The rest of the arguments only needs to be supplied when table=True.
+        caption: String to use for the table caption.
+        pos: Positioning string for the table.
+        label: Optional label for the table.
 
-    def __init__(self, columns, toprule=False, bottomrule=False):  # {{{1
-        """
-        Create a LaTeX tabular environment.
-
-        Arguments:
-            columns: A string containing the specification for the columns.
-                This string is scanned for the ‘l’, ‘c’, ‘r’ and ‘p’
-                specifiers. The ‘*’ specifier is *not* handled.
-            toprule: Print a horizontal rule at the top of the table.
-            bottomrule: Print a horizontal rule at the bottom of the table.
-        """
-        self.header = r'\begin{tabular}{' + columns + r'}'
-        # Find the number of columns. Note that this does *not* handle *{}{}!
-        self.numcols = len(re.findall('l|c|r|p{.*?}', columns))
-        self.rows = []
-        self.footer = r'\end{tabular}'
-        self.toprule = toprule
-        self.bottomrule = bottomrule
-
-    def row(self, *args):  # {{{1
-        r"""Add a row to the table.
-
-        Arguments:
-            args: Every argument forms a column of the table. Note that the
-                arguments cannot contain '\\'. The amount of arguments
-                should not exceed ‘self.numcols’, and it should be less if the
-                arguments contain '&'
-
-        Raises:
-            ValueError: If any of the arguments contain '\\' or if the row
-                contains too many '&'.
-            IndexError: When more than ‘self.numcols’ arguments are supplied.
-        """
-        if len(args) > self.numcols:
-            raise IndexError('too many columns specified')
-        content = '  ' + r' & '.join(args) + r'\\'
-        if r'\\' in ' '.join(args):
-            raise ValueError("arguments should not contain \\\\.")
-        if content.count('&') > self.numcols - 1:
-            raise ValueError("Too many '&'")
-        self.rows.append('  ' + r' & '.join(args) + r'\\')
-
-    def midrule(self):  # {{{1
-        r"""Add a \midrule to the table."""
-        self.rows.append(r'  \midrule')
-
-    def __str__(self):  # {{{1
-        """
-        Return the string rendering of the environment.
-        """
-        table = [self.header]
-        if self.toprule:
-            table += [r'  \toprule']
-        table += self.rows
-        if self.toprule:
-            table += [r'  \bottomrule']
-        table += [self.footer]
-        return '\n'.join(table)
+    Returns:
+        The header for the table.
+    """
+    if not table:
+        return r'\begin{tabular}{' + columns + r'}'
+    rs = r'\begin{table}[' + pos + ']\n'
+    rs += '  \\centering\n'
+    if label:
+        rs += r'  \caption{\label{tb:' + str(label) + '}' + caption + \
+            '}\n'
+    else:
+        rs += r'  \caption{' + caption + '}\n'
+    rs += r'  \begin{tabular}{' + columns + '}'
+    return rs
 
 
-class Table(Tabular):  # {{{1
-    """Floating LaTeX table generator."""
+def footer(table=False):
+    """Create a table footer.
 
-    def __init__(self, columns, caption, pos='!htbp', label=None, toprule=False, bottomrule=False):
-        """Create a LaTeX table float.
+    Arguments:
+        table: Use a table environment when true, otherwise just use a
+        tabular environment.
 
-        Arugments:
-            columns: The columns of the table, e.g. 'lcr'
-            caption: The caption for the table.
-            pos: Indicates the position of the float on the page. Defaults to
-                '!htbp'.
-            label: Optional label for the table. Defaults to None
-        """
-        Tabular.__init__(self, columns, toprule=toprule, bottomrule=bottomrule)
-        rs = r'\begin{table}[' + pos + ']\n'
-        rs += '  \\centering\n'
-        if label:
-            rs += r'  \caption{\label{tb:' + str(label) + '}' + caption + \
-                '}\n'
-        else:
-            rs += r'  \caption{' + caption + '}\n'
-        rs += r'  \begin{tabular}{' + columns + '}'
-        self.header = rs
-        self.footer = r'  \end{tabular}' + '\n' + r'\end{table}'
+    Returns:
+        The footer for the table.
+    """
+    if not table:
+        return r'\end{tabular}'
+    return r'  \end{tabular}' + '\n' + r'\end{table}'
+
+
+@lru_cache(maxsize=24)
+def _numcols(columns):
+    """Find the number of columns."""
+    return len(re.findall('l|c|r|p{.*?}', columns))
+
+
+def row(columns, *args):
+    r"""Create a table row.
+
+    Arguments:
+        columns: A string containing the specification for the columns.
+            This string is scanned for the ‘l’, ‘c’, ‘r’ and ‘p’
+            specifiers. The ‘*’ specifier is *not* handled.
+        args: Every argument forms a column of the table. Note that the
+            arguments cannot contain '\\'. The amount of arguments
+            should not exceed ‘self.numcols’, and it should be less if the
+            arguments contain '&'
+
+    Returns:
+        The new row.
+    """
+    numcols = _numcols(columns)
+    if len(args) > numcols:
+        raise IndexError('too many columns specified')
+    content = '  ' + r' & '.join(args) + r'\\'
+    if r'\\' in ' '.join(args):
+        raise ValueError("arguments should not contain \\\\.")
+    if content.count('&') > numcols - 1:
+        raise ValueError("Too many '&'")
+    return '  ' + r' & '.join(args) + r'\\'

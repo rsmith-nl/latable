@@ -4,7 +4,7 @@
 #
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-05T23:07:20+0100
-# Last modified: 2018-11-06T18:07:59+0100
+# Last modified: 2018-11-06T21:39:54+0100
 
 .PHONY: all install tests dist clean backup deinstall check tags format
 .SUFFIXES: .ps .pdf .py
@@ -50,7 +50,7 @@ clean::
 	rm -rf dist build backup-*.tar.gz MANIFEST __pycache__
 
 check::
-	pylama -i E501 ${MOD}.py tests/*.py
+	env PYTHONWARNINGS=ignore::FutureWarning pylama -i E501 ${MOD}.py tests/*.py
 
 tags::
 	exctags -R

@@ -4,10 +4,9 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T00:33:19+0100
-# Last modified: 2018-11-06T07:43:18+0100
+# Last modified: 2018-11-06T22:59:45+0100
 """Generate LaTeX tables from Python."""
 
-from functools import lru_cache
 import re
 
 __version__ = 2.0
@@ -54,33 +53,31 @@ def footer(table=False):
     return r'  \end{tabular}' + '\n' + r'\end{table}'
 
 
-@lru_cache(maxsize=24)
-def _numcols(columns):
-    """Find the number of columns."""
-    return len(re.findall('l|c|r|p{.*?}', columns))
-
-
-def row(columns, *args):
-    r"""Create a table row.
+def rowfn(columns, ignore=False):
+    """Generate a function to create rows for the given column specification.
 
     Arguments:
         columns: A string containing the specification for the columns.
             This string is scanned for the ‘l’, ‘c’, ‘r’ and ‘p’
             specifiers. The ‘*’ specifier is *not* handled.
-        args: Every argument forms a column of the table. Note that the
-            arguments cannot contain '\\'. The amount of arguments
-            should not exceed ‘self.numcols’, and it should be less if the
-            arguments contain '&'
+        ignore: If this is True, columns outside of the specification
+            are ignored.
 
     Returns:
-        The new row.
+        A function to print rows.
     """
-    numcols = _numcols(columns)
-    if len(args) > numcols:
-        raise IndexError('too many columns specified')
-    content = '  ' + r' & '.join(args) + r'\\'
-    if r'\\' in ' '.join(args):
-        raise ValueError("arguments should not contain \\\\.")
-    if content.count('&') > numcols - 1:
-        raise ValueError("Too many '&'")
-    return '  ' + r' & '.join(args) + r'\\'
+    numcols = len(re.findall('l|c|r|p{.*?}', columns))
+
+    def row(*args):
+        if ignore:
+            args = args[:numcols]
+        elif len(args) > numcols:
+            raise IndexError('too many columns specified')
+        content = ' & '.join(args)
+        if r'\\' in content:
+            raise ValueError("arguments should not contain \\\\.")
+        if content.count('&') > numcols - 1:
+            raise ValueError("Too many '&'")
+        return '  ' + content + r'\\'
+
+    return row

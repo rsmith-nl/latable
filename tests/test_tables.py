@@ -3,7 +3,7 @@
 #
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T20:02:16+0100
-# Last modified: 2018-11-06T21:21:23+0100
+# Last modified: 2018-11-06T23:13:36+0100
 
 import pytest
 import latable as lt
@@ -34,21 +34,48 @@ def test_empty_table():
     assert result == check
 
 
-def test_rows():
-    """Check normal and short rows."""
+def test_normal_row():
+    """Check normal row."""
     check = '  a & b\\\\'
-    result = lt.row('lr', 'a', 'b')
+    row = lt.rowfn('lr')
+    result = row('a', 'b')
     assert result == check
+
+
+def test_short_row():
+    """Check short row."""
     check = '  a\\\\'
-    result = lt.row('lr', 'a')
+    row = lt.rowfn('lr')
+    result = row('a')
     assert result == check
 
 
-def test_bad_rows():
-    """Check exceptions."""
+def test_row_ignore():
+    """Check that ignore works."""
+    row = lt.rowfn('lr', ignore=True)
+    check = '  a & b\\\\'
+    result = row('a', 'b', 'c')
+    assert result == check
+    result = row('a', 'b', 'c & d')
+    assert result == check
+
+
+def test_bad_row_extra_args():
+    """Check that too many arguments raises an exception."""
+    row = lt.rowfn('lr')
     with pytest.raises(IndexError):
-        lt.row('lr', 'a', 'b', 'c')
+        row('a', 'b', 'c')
+
+
+def test_bad_row_backslashes():
+    """Check that a double blackslash raises an exception."""
+    row = lt.rowfn('lr')
     with pytest.raises(ValueError):
-        lt.row('lr', 'a', 'b\\\\')
+        row('a', 'b\\\\')
+
+
+def test_bad_row_ampersand():
+    """Check that arguments with an extra ampersand raises an exception."""
+    row = lt.rowfn('lr')
     with pytest.raises(ValueError):
-        lt.row('lr', 'a', 'b & c')
+        row('a', 'b & c')

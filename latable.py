@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T00:33:19+0100
-# Last modified: 2018-11-07T00:12:34+0100
+# Last modified: 2018-11-07T13:03:44+0100
 """Generate LaTeX tables from Python."""
 
 import re
@@ -81,3 +81,7 @@ def rowfn(columns, ignore=False):  # {{{1
         return '  ' + content + r'\\'
 
     return row  # }}}
+
+
+def midrule():
+    return '  \\midrule'

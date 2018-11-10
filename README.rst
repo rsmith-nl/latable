@@ -9,6 +9,7 @@ This module was distilled out of the boilerplate code that I've added to
 Python scripts to generate LaTeX output.
 
 Version 2 switches from objects to pure functions and a more functional style.
+Version 3 was then further simplified.
 
 Usage
 =====
@@ -19,12 +20,11 @@ Create a simple, non-floating table;
 
     import latable as lt
 
-    colspec = 'lr'
-    row = lt.rowfn(colspec)
-    print(lt.header(colspec))
+    header, row, footer = lt.prepare('lr')
+    print(header)
     print(row('height', '29.7 cm'))
     print(row('width', '21.0 cm'))
-    print(lt.footer())
+    print(footer)
 
 This produces;
 
@@ -33,11 +33,11 @@ This produces;
     \begin{tabular}{lr}
       height & 29.7 cm\\
       width & 21.0 cm\\
-    \end{tabular}}
+    \end{tabular}
 
-The ``rowfn`` is special in that it returns a specialized function that knows
-about the amount of columns. It can raise an exception if too many columns are
-used, or it can ignore extra columns.
+The ``row`` is a specialized function that knows about the amount of columns.
+It can raise an exception if too many columns are used, or it can ignore extra
+columns.
 
 As an alternative to ``tabular``, a floating ``table`` environment can be used;
 
@@ -45,31 +45,31 @@ As an alternative to ``tabular``, a floating ``table`` environment can be used;
 
     import latable as lt
 
-    colspec = 'lr'
-    row = lt.rowfn(colspec)
-    print(lt.header(colspec, table=True, caption='A4 paper size',
-                    pos='ht', label='a4paper'))
+    header, row, footer = lt.prepare('lr', table=True, caption='A4 paper size',
+                                     pos='ht', label='a4paper')
+    print(header)
     print(row('height', '29.7 cm'))
     print(row('width', '21.0 cm'))
-    print(lt.footer(True))
+    print(footer)
 
 This produces;
 
 .. code-block:: tex
 
-   \begin{table}[ht]
-     \centering
-     \caption{\label{tb:a4paper}A4 paper size}
-     \begin{tabular}{lr}
-     height & 29.7 cm\\
-     width & 21.0 cm\\
-     \end{tabular}
-   \end{table}
-
+    \begin{table}[ht]
+      \centering
+      \caption{\label{tb:a4paper}A4 paper size}
+      \begin{tabular}{lr}
+        height & 29.7 cm\\
+        width & 21.0 cm\\
+      \end{tabular}
+    \end{table}
 
 .. note:: The generated ``row`` function will raise a ``ValueError`` if one of its
     arguments contains ``&`` or ``\\``. Additionally an ``IndexError`` is raised if it
     contains more column arguments than the column specification allows.
+    Unless the argument ``ignore=True`` is supplied to ``prepare``, in which
+    case extra columns will be ignored.
 
 
 Tests

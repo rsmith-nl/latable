@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T00:33:19+0100
-# Last modified: 2018-11-07T13:03:44+0100
+# Last modified: 2018-11-10T01:07:33+0100
 """Generate LaTeX tables from Python."""
 
 import re
@@ -64,11 +64,14 @@ def rowfn(columns, ignore=False):  # {{{1
             are ignored.
 
     Returns:
-        A function to print rows.
+        A function to print rows. The generated function can accepts
+        loose arguments or a single list or tuple argument.
     """
     numcols = len(re.findall('l|c|r|p{.*?}', columns))
 
     def row(*args):
+        if len(args) == 1 and type(args[0] in (list, tuple)):
+            args = args[0]
         if ignore:
             args = args[:numcols]
         elif len(args) > numcols:

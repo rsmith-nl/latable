@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T20:02:16+0100
-# Last modified: 2018-11-10T10:02:56+0100
+# Last modified: 2019-07-09T00:02:42+0200
 
 import pytest
 import latable as lt
@@ -23,12 +23,12 @@ def test_empty_tabular():  # {{{1
 
 def test_empty_table():  # {{{1
     """Create empty table environment."""
-    check = '''\\begin{table}[!htbp]
-  \\centering
-  \\caption{\label{tb:foo}Bar}
-  \\begin{tabular}{lr}
-  \\end{tabular}
-\\end{table}'''
+    check = r'''\begin{table}[!htbp]
+  \centering
+  \caption{\label{tb:foo}Bar}
+  \begin{tabular}{lr}
+  \end{tabular}
+\end{table}'''
     lines = []
     header, _, footer = lt.prepare('lr', table=True, caption='Bar', label='foo')
     lines.append(header)
@@ -65,7 +65,7 @@ def test_row_ignore():  # {{{1
 
 def test_bad_row_extra_args():  # {{{1
     """Check that too many arguments raises an exception."""
-    _, row, _ = lt.prepare('lr')
+    _, row, _ = lt.prepare('lr', ignore=False)
     with pytest.raises(IndexError):
         row('a', 'b', 'c')  # }}}
 

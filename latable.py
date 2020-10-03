@@ -9,7 +9,7 @@
 
 import re
 
-__version__ = 3.1
+__version__ = "2019.07.08"
 
 
 def prepare(

@@ -12,73 +12,73 @@ import latable as lt
 
 def test_empty_tabular():  # {{{1
     """Create empty tabular environment."""
-    check = '\\begin{tabular}{lr}\n\\end{tabular}'
+    check = "\\begin{tabular}{lr}\n\\end{tabular}"
     lines = []
-    header, _, footer = lt.prepare('lr', False)
+    header, _, footer = lt.prepare("lr", False)
     lines.append(header)
     lines.append(footer)
-    result = '\n'.join(lines)
+    result = "\n".join(lines)
     assert result == check  # }}}
 
 
 def test_empty_table():  # {{{1
     """Create empty table environment."""
-    check = r'''\begin{table}[!htbp]
+    check = r"""\begin{table}[!htbp]
   \centering
   \caption{\label{tb:foo}Bar}
   \begin{tabular}{lr}
   \end{tabular}
-\end{table}'''
+\end{table}"""
     lines = []
-    header, _, footer = lt.prepare('lr', table=True, caption='Bar', label='foo')
+    header, _, footer = lt.prepare("lr", table=True, caption="Bar", label="foo")
     lines.append(header)
     lines.append(footer)
-    result = '\n'.join(lines)
+    result = "\n".join(lines)
     assert result == check  # }}}
 
 
 def test_normal_row():  # {{{1
     """Check normal row."""
-    check = '  a & b\\\\'
-    _, row, _ = lt.prepare('lr')
-    result = row('a', 'b')
+    check = "  a & b\\\\"
+    _, row, _ = lt.prepare("lr")
+    result = row("a", "b")
     assert result == check  # }}}
 
 
 def test_short_row():  # {{{1
     """Check short row."""
-    check = '  a\\\\'
-    _, row, _ = lt.prepare('lr')
-    result = row('a')
+    check = "  a\\\\"
+    _, row, _ = lt.prepare("lr")
+    result = row("a")
     assert result == check  # }}}
 
 
 def test_row_ignore():  # {{{1
     """Check that ignore works."""
-    check = '  a & b\\\\'
-    _, row, _ = lt.prepare('lr', ignore=True)
-    result = row('a', 'b', 'c')
+    check = "  a & b\\\\"
+    _, row, _ = lt.prepare("lr", ignore=True)
+    result = row("a", "b", "c")
     assert result == check
-    result = row('a', 'b', 'c & d')
+    result = row("a", "b", "c & d")
     assert result == check  # }}}
 
 
 def test_bad_row_extra_args():  # {{{1
     """Check that too many arguments raises an exception."""
-    _, row, _ = lt.prepare('lr', ignore=False)
+    _, row, _ = lt.prepare("lr", ignore=False)
     with pytest.raises(IndexError):
-        row('a', 'b', 'c')  # }}}
+        row("a", "b", "c")  # }}}
 
 
 def test_bad_row_backslashes():  # {{{1
     """Check that a double blackslash raises an exception."""
-    _, row, _ = lt.prepare('lr')
+    _, row, _ = lt.prepare("lr")
     with pytest.raises(ValueError):
-        row('a', 'b\\\\')  # }}}
+        row("a", "b\\\\")  # }}}
 
 
 def test_bad_row_ampersand():  # {{{1
     """Check that arguments with an extra ampersand raises an exception."""
-    _, row, _ = lt.prepare('lr')
+    _, row, _ = lt.prepare("lr")
     with pytest.raises(ValueError):
-        row('a', 'b & c')  # }}}
+        row("a", "b & c")  # }}}

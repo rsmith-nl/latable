@@ -13,8 +13,7 @@ __version__ = "2019.07.08"
 
 
 def prepare(
-    columns, ignore=True, table=False, caption='Undefined', pos='!htbp',
-    label=None
+    columns, ignore=True, table=False, caption="Undefined", pos="!htbp", label=None
 ):
     """Prepare a table.
 
@@ -49,7 +48,7 @@ def prepare(
     >>> print(footer)
     \end{tabular}
     """
-    numcols = len(re.findall('l|c|r|p{.*?}', columns))
+    numcols = len(re.findall("l|c|r|p{.*?}", columns))
 
     def rowfn(*args):
         """Function for generating rows."""
@@ -58,33 +57,33 @@ def prepare(
         if ignore:
             args = args[:numcols]
         elif len(args) > numcols:
-            raise IndexError('too many columns specified')
+            raise IndexError("too many columns specified")
         # Try to convert other types of arguments to strings.
         args = [a if isinstance(a, str) else str(a) for a in args]
-        content = ' & '.join(args)
-        if r'\\' in content:
+        content = " & ".join(args)
+        if r"\\" in content:
             raise ValueError("arguments should not contain \\\\.")
-        if content.count('&') > numcols - 1:
+        if content.count("&") > numcols - 1:
             raise ValueError("Too many '&'")
         if table:
-            indent = '    '
+            indent = "    "
         else:
-            indent = '  '
-        return indent + content + r'\\'
+            indent = "  "
+        return indent + content + r"\\"
 
     if not table:
-        header = r'\begin{tabular}{' + columns + r'}'
-        footer = r'\end{tabular}'
+        header = r"\begin{tabular}{" + columns + r"}"
+        footer = r"\end{tabular}"
     else:
-        header = r'\begin{table}[' + pos + ']\n  \\centering\n'
+        header = r"\begin{table}[" + pos + "]\n  \\centering\n"
         if label:
-            header += r'  \caption{\label{tb:' + str(label) + '}' + caption + '}\n'
+            header += r"  \caption{\label{tb:" + str(label) + "}" + caption + "}\n"
         else:
-            header += r'  \caption{' + caption + '}\n'
-        header += r'  \begin{tabular}{' + columns + '}'
-        footer = '  \\end{tabular}\n\\end{table}'
+            header += r"  \caption{" + caption + "}\n"
+        header += r"  \begin{tabular}{" + columns + "}"
+        footer = "  \\end{tabular}\n\\end{table}"
     return (header, rowfn, footer)
 
 
 def midrule():
-    return '  \\midrule'
+    return "  \\midrule"

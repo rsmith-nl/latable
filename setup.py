@@ -9,24 +9,27 @@
 from distutils.core import setup
 from latable import __version__
 
-with open('README.rst') as file:
+with open("README.rst") as file:
     ld = file.read()
 
 setup(
-    name='latable',
+    name="latable",
     version=__version__,
-    license='MIT',
-    description='Module to generate LaTeX tables',
-    author='Roland Smith',
-    author_email='rsmith@xs4all.nl',
-    url='https://github.com/rsmith-nl/latable',
-    py_modules=['latable'],
+    license="MIT",
+    description="Module to generate LaTeX tables",
+    author="Roland Smith",
+    author_email="rsmith@xs4all.nl",
+    url="https://github.com/rsmith-nl/latable",
+    py_modules=["latable"],
     classifiers=[
-        'Development Status :: 5 - Production/Stable', 'Environment :: Other Environment'
-        'Intended Audience :: Developers', 'Natural Language :: English',
-        'License :: OSI Approved :: MIT License', 'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.6', 'Programming Language :: Python :: 3.7',
-        'Topic :: Printing'
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Other Environment" "Intended Audience :: Developers",
+        "Natural Language :: English",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Topic :: Printing",
     ],
-    long_description=ld
+    long_description=ld,
 )

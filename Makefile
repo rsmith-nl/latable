@@ -13,7 +13,7 @@ USRPATH!=${PY} -c "import site; print(site.getusersitepackages())"
 # Program settings
 CHECK:= env PYTHONWARNINGS=ignore::FutureWarning pylama -i E501,W605
 TAGS:= uctags -R -V
-FMT:= yapf -i
+FMT:= black
 TEST:= pytest -v
 
 # Default target.
@@ -28,7 +28,7 @@ all::
 	@echo '* clean: remove all generated files.'
 	@echo '* check: run pylama on all python files.'
 	@echo '* tags: run exctags.'
-	@echo '* format: format the source with yapf.'
+	@echo '* format: format the source with black.'
 
 install::
 	@if [ `id -u` != 0 ]; then \

@@ -14,7 +14,7 @@ USRPATH!=${PY} -c "import site; print(site.getusersitepackages())"
 CHECK:= env PYTHONWARNINGS=ignore::FutureWarning pylama -i E501,W605
 TAGS:= uctags -R -V
 FMT:= black
-TEST:= pytest -v
+TEST:= pytest -v -W ignore::DeprecationWarning
 
 # Default target.
 all::

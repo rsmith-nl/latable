@@ -4,12 +4,12 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T00:33:19+0100
-# Last modified: 2019-07-08T23:12:19+0200
+# Last modified: 2024-07-22T22:00:58+0200
 """Generate LaTeX tables from Python."""
 
 import re
 
-__version__ = "2019.07.08"
+__version__ = "2019.7"
 
 
 def prepare(

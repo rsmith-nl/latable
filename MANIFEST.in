@@ -1,2 +1,0 @@
-include tests/__init__.py
-include tests/test_tables.py

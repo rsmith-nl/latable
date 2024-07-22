@@ -10,6 +10,37 @@ Python scripts to generate LaTeX output.
 
 Version 2 switches from objects to pure functions and a more functional style.
 Version 3 was then further simplified.
+After 3.1 I switched to a date-based versioning system, 2019.07.
+
+
+Installation
+============
+
+This module has no requirements outside the standard library.
+The installation uses  ``build`` and ``flit_core``.
+
+On some systems, python 3 is installed as ``python3``. On others, it's
+installed as just ``python``. Adapt the following commands accordingly.
+
+First, create a wheel::
+
+    > python3 -m build -n -w
+
+Installing it for the local user is the preferred method, since this doesn't
+require root/administrator privileges.
+To install it for the local user::
+
+    > python3 -m pip install --user dist/*.whl
+
+To install it system-wide (requires root privileges)::
+
+    # python3 -m pip install dist/*.whl
+
+To remove the installation (require root privileges in case of a system-wide
+installation)::
+
+    python3 -m pip uninstall latable
+
 
 Usage
 =====

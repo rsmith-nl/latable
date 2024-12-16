@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright © 2018 R.F. Smith <rsmith@xs4all.nl>
 # Created: 2018-11-06T00:33:19+0100
-# Last modified: 2024-07-22T22:00:58+0200
+# Last modified: 2024-12-16T17:50:16+0100
 """Generate LaTeX tables from Python."""
 
 import re
@@ -46,7 +46,7 @@ def prepare(
     >>> print(row(3, 4.56))
     3 & 4\\
     >>> print(footer)
-    \end{tabular}
+    \\end{tabular}
     """
     numcols = len(re.findall("l|c|r|p{.*?}", columns))
 
